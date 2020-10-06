@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import numpy as np
 
 # Least Squares
@@ -139,3 +140,6 @@ def prediction(x,w):
     else:
         y=-1
     return y
+=======
+# Methods here
+>>>>>>> 65013c8... Small update
