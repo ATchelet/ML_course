@@ -1,49 +1,4 @@
 import numpy as np
-
-# Least Squares
-def least_squares(y, tx):
-    '''
-    A method that calculates the optimal weights for x  to predict y using least squares method.
-
-    usage: w, loss = least_squares(y, tx)
-
-    input:
-    -y  - output labels vector [Nx1]
-    -tx - input features matrix [NxD]
-    output:
-    -w      - optimal weights [1xD]
-    -loss   - overall distance of prediction from true label [scalar]
-    '''
-    w = np.linalg.inv(tx.transpose()@tx)@tx.transpose()@y #calculation of w* = (X^T.X).X^T.y
-    e = y-tx@w #calculation of error
-    loss = 0.5*e@e/len(y) #calculation of loss (MSE)
-    return w, loss
-
-# Regularized logistic regression using gradient descent or SGD
-def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='GD'):
-    '''
-    A method that calculates the optimal weights for x  to predict y.
-
-    usage: w, loss = least_squares(y, tx)
-
-    input:
-    -y          - output labels vector [Nx1]
-    -tx         - input features matrix [NxD]
-    -initial_w  - initial weights values [1xD]
-    -max_iter   - maximal number of iterations [scalar]
-    -gamma      - regularization parameter [scalar]
-    -mode       - determines if the method uses gradient descent 'GD' or stochastic gradient descent 'SGD' ['GD' or 'SGD']
-    output:
-    -w      - optimal weights [1xD]
-    -loss   - overall distance of prediction from true label [scalar]
-    '''
-    if not any(mode=='GD', mode=='SGD'):
-        raise UnsupportedMode
-
-    
-    return w, loss
-
-    import numpy as np
 ############# least_squares using SGD #################################ààà
 #compute loss function using least square
 def least_square_loss(y, tx, w)::
@@ -86,10 +41,11 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
 def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     """Linear regression using stochastic gradient descent algorithm."""
     w = initial_w
-    for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
-        grad=compute_stoch_gradient(y_batch, tx_batch, w)
-        loss=least_squares_loss(y, tx, w)
-        w=w-gamma*grad
+    for n_iter in range(max_iters):
+        for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=1):
+            grad=compute_stoch_gradient(y_batch, tx_batch, w)
+            loss=least_squares_loss(y, tx, w)
+            w=w-gamma*grad
     return loss, w
 
 ################## logistic regression #####################
@@ -110,15 +66,17 @@ def compute_stoch_gradient_logistic(y, x, w):
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """Logistic regression using stochastic gradient descent algorithm."""
     w = initial_w
-    # cycle related to batches (in the case of SGD we only have one batch)
-    for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
-        grad=compute_stoch_gradient_logistic(y_batch, tx_batch, w)
-        loss=loss_logistic(y, tx, w)
-        w=w-gamma*grad
+    #cycle related to iterations
+    for n_iter in range(max_iters):
+        # cycle related to batches (in the case of SGD we only have one batch)
+        for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=1):
+            grad=compute_stoch_gradient_logistic(y_batch, tx_batch, w)
+            loss=loss_logistic(y, tx, w)
+            w=w-gamma*grad
     return loss, w
 def prediction(x,w):
     if logistic_function(x,w)>=0.5:
         y=1
     else:
-        y=-1
+        y=0
     return y

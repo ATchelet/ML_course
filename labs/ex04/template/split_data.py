@@ -13,7 +13,11 @@ def split_data(x, y, ratio, seed=1):
     # set seed
     np.random.seed(seed)
     # ***************************************************
-    # INSERT YOUR CODE HERE
-    # split the data based on the given ratio: TODO
+    # split the data based on the given ratio: 
     # ***************************************************
-    raise NotImplementedError
+    idx = int(ratio*len(y))
+    x_tr = x[:idx]
+    y_tr = y[:idx]
+    x_te = x[idx:]
+    y_te = y[idx:]
+    return x_tr, y_tr, x_te, y_te
