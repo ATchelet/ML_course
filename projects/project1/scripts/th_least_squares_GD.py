@@ -19,6 +19,7 @@ def compute_gradient(y, tx, w):
 
 
 def gradient_descent(y, tx, initial_w, max_iters, gamma):
+<<<<<<< HEAD
     """Gradient descent algorithm.
     
     Input
@@ -35,6 +36,9 @@ def gradient_descent(y, tx, initial_w, max_iters, gamma):
     ------
     w : the last computed wheights
     """
+=======
+    """Gradient descent algorithm."""
+>>>>>>> bcdba19... hw1 added ls_gd and ridge regress
     
     w = initial_w
     
@@ -45,6 +49,7 @@ def gradient_descent(y, tx, initial_w, max_iters, gamma):
         loss = compute_loss(y, tx, w)
         #print(loss)
         gradient = compute_gradient(y, tx, w)
+<<<<<<< HEAD
         
         # update w by gradient
         w = w - gamma*gradient
@@ -56,3 +61,21 @@ def gradient_descent(y, tx, initial_w, max_iters, gamma):
 #               bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
 
     return w
+=======
+
+        # ***************************************************
+        #raise NotImplementedError
+        # ***************************************************
+        # INSERT YOUR CODE HERE
+        w = w - gamma*gradient
+        # TODO: update w by gradient
+        # ***************************************************
+        #raise NotImplementedError
+        # store w and loss
+        ws.append(w)
+        losses.append(loss)
+        print("Gradient Descent({bi}/{ti}): loss={l}, w0={w0}, w1={w1}".format(
+              bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
+
+    return losses, ws
+>>>>>>> bcdba19... hw1 added ls_gd and ridge regress
