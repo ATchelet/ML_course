@@ -14,7 +14,7 @@ def least_squares(y, tx):
     -w      - optimal weights [1xD]
     -loss   - overall distance of prediction from true label [scalar]
     '''
-    w = np.linalg.inv(tx.transpose()@tx)@tx.transpose()@y #calculation of w* = (X^T.X).X^T.y
+    w = np.linalg.inv(tx.T()@tx)@tx.T()@y #calculation of w* = (X^T.X).X^T.y
     e = y-tx@w #calculation of error
     loss = 0.5*e@e/len(y) #calculation of loss (MSE)
     return w, loss
@@ -37,8 +37,17 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='G
     -w      - optimal weights [1xD]
     -loss   - overall distance of prediction from true label [scalar]
     '''
+    # Validate mode
     if not any(mode=='GD', mode=='SGD'):
         raise UnsupportedMode
+    
+    e = initial_w
+    if mode=='SGD': # Stochastic Gradient Descent
+        for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
+
+
+    else: # Gradient Descent
+        for n_iter in range(max_iters):
 
     
     return w, loss
