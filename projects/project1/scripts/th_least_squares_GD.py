@@ -19,7 +19,22 @@ def compute_gradient(y, tx, w):
 
 
 def gradient_descent(y, tx, initial_w, max_iters, gamma):
-    """Gradient descent algorithm."""
+    """Gradient descent algorithm.
+    
+    Input
+    -----
+    y : vector of answers of size N
+    tx : matrix with column features and row datapoints. tx [NxD]
+    initial_w : vector of initial wheights, size D, one for each feature
+    max_iters : int of how many iterations to go through
+    gamma : float impacting how much the wheights are changed
+        based on the current step error. Very low values are slower,
+        but very high values will give diverging w. 
+    
+    Return
+    ------
+    w : the last computed wheights
+    """
     
     w = initial_w
     
@@ -30,19 +45,14 @@ def gradient_descent(y, tx, initial_w, max_iters, gamma):
         loss = compute_loss(y, tx, w)
         #print(loss)
         gradient = compute_gradient(y, tx, w)
-
-        # ***************************************************
-        #raise NotImplementedError
-        # ***************************************************
-        # INSERT YOUR CODE HERE
+        
+        # update w by gradient
         w = w - gamma*gradient
-        # TODO: update w by gradient
-        # ***************************************************
-        #raise NotImplementedError
-        # store w and loss
-        ws.append(w)
-        losses.append(loss)
-        print("Gradient Descent({bi}/{ti}): loss={l}, w0={w0}, w1={w1}".format(
-              bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
 
-    return losses, ws
+        # store w and loss
+#         ws.append(w)
+#         losses.append(loss)
+#         print("Gradient Descent({bi}/{ti}): loss={l}, w0={w0}, w1={w1}".format(
+#               bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
+
+    return w
