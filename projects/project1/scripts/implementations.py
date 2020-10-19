@@ -245,20 +245,16 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='S
     w = initial_w
     if mode=='SGD': # Stochastic Gradient Descent
         for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
-            exp_Xw = np.exp(tx_batch.T@w)
-            sigma = exp_Xw/(1+exp_Xw)
-            grad = tx_batch.T@(sigma-y_batch) + lambda_*np.sum(w)
-            w = w - gamma*grad
+            grad = tx_batch.T@((1/(1+np.exp(-tx_batch@w)))-y_batch) + lambda_*w
+            w = w - gamma*grad 
 
     else: # Gradient Descent
         for n_iter in range(max_iters):
-            exp_Xw = np.exp(tx.T@w)
-            sigma = exp_Xw/(1+exp_Xw)
-            grad = tx.T@(sigma-y) + lambda_*np.sum(w)
+            grad = tx.T@((1/(1+np.exp(-tx@w)))-y) + lambda_*w
             w = w - gamma*grad
 
     # calculate error
-    loss = np.sum(np.log(1+np.exp(tx.T@w))-y*tx.T@w) + 0.5*lambda_*w.dot(w)
+    loss = np.sum(np.log(1+np.exp(tx@w))-y*(tx@w)) + 0.5*lambda_*w.dot(w)
     
     return w, loss
 
