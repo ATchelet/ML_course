@@ -31,7 +31,11 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
             yield shuffled_y[start_index:end_index], shuffled_tx[start_index:end_index]
 
 ### Mean square error calculation ###
+<<<<<<< HEAD
 def MSE(y, tx, w):
+=======
+def MSE(y, tx, e):
+>>>>>>> b5a9f10... Updated implementations.py
     """
     A method that calculates the mean square error (MSE).
 
@@ -47,6 +51,7 @@ def MSE(y, tx, w):
     e = y-tx@w #calculation of error
     loss = 0.5*e@e/len(y) #calculation of loss (MSE)
     return loss
+<<<<<<< HEAD
 
     ### Mean square error calculation ###
 def logistic_loss(y, tx, w):
@@ -64,6 +69,8 @@ def logistic_loss(y, tx, w):
     """
     # calculate logistic regression loss
     return np.sum(np.log(1+np.exp(-y*(tx@w))))
+=======
+>>>>>>> b5a9f10... Updated implementations.py
             
 ########################    
 ### Implementations  ###
@@ -95,7 +102,11 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
         e = y - np.dot(tx, w)# e is the error vector e = y - f(x). NB there is a calculated error for each datapoint
         grad = -np.dot(tx.T, e)/ len(e)
         
+<<<<<<< HEAD
         # update weights
+=======
+        # update w by gradient
+>>>>>>> b5a9f10... Updated implementations.py
         w = w - gamma*grad
     
     # calculate error
@@ -124,13 +135,21 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     
     w = initial_w
     
+<<<<<<< HEAD
     for minibatch_y, minibatch_tx in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
+=======
+    for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
+>>>>>>> b5a9f10... Updated implementations.py
         # compute gradient
         # tx is the x input matrix with the augmented 1 column at the beginning for the w0 parameter as the offset at axis origins
         e=minibatch_y-minibatch_tx@w
         grad=-np.transpose(minibatch_tx)@e/len(e)
         
+<<<<<<< HEAD
         # update weights
+=======
+        # update w by gradient
+>>>>>>> b5a9f10... Updated implementations.py
         w = w - gamma*grad
     
     # calculate error
@@ -153,7 +172,10 @@ def least_squares(y, tx):
     -w      - optimal weights [1xD]
     -loss   - overall distance of prediction from true label [scalar]
     '''
+<<<<<<< HEAD
     # update weights
+=======
+>>>>>>> b5a9f10... Updated implementations.py
     w = np.linalg.inv(tx.T@tx)@tx.T@y #calculation of w* = (X^T.X).X^T.y
    
     # calculate error
@@ -198,7 +220,11 @@ def ridge_regression(y, tx, lambda_):
 ### Logistic regression using gradient descent or SGD ###
 def logistic_regression(y, tx, initial_w, max_iters, gamma, mode='SGD'):
     '''
+<<<<<<< HEAD
     A method that calculates the optimal weights for x  to predict y in {0,1} using logistic regression using gradient descent or SGD.
+=======
+    A method that calculates the optimal weights for x  to predict y using logistic regression using gradient descent or SGD.
+>>>>>>> b5a9f10... Updated implementations.py
     
     usage: w, loss = logistic_regression(y, tx, initial_w, max_iters, gamma)
     
@@ -223,28 +249,44 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, mode='SGD'):
         # cycle related to batches (in the case of SGD we only have one batch)
         for n_iter in range(max_iters):
             for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=1):
+<<<<<<< HEAD
                 # calculate gradient
                 grad=tx_batch.T.dot(np.exp(tx_batch.dot(w))/(1+np.exp(tx_batch.dot(w)))-y_batch)
                 # update weights
+=======
+                grad=tx_batch.T.dot(np.exp(tx_batch.dot(w))/(1+np.exp(tx_batch.dot(w)))-y_batch)
+>>>>>>> b5a9f10... Updated implementations.py
                 w=w-gamma*grad
                 
     else: # mode='GD' gradient descent method
         for n_iter in range(max_iters):
+<<<<<<< HEAD
             # calculate gradient
             grad=tx.T.dot(np.exp(tx.dot(w))/(1+np.exp(tx.dot(w)))-y)
             # update weights
+=======
+            grad=tx.T.dot(np.exp(tx.dot(w))/(1+np.exp(tx.dot(w)))-y)
+>>>>>>> b5a9f10... Updated implementations.py
             w=w-gamma*grad
             
     # calculate error
     loss=np.sum(np.log(1+np.exp(tx.dot(w)))-y*tx.dot(w))
     
+<<<<<<< HEAD
     return w, loss
+=======
+    return loss, w
+>>>>>>> b5a9f10... Updated implementations.py
     
     
 # Regularized logistic regression using gradient descent or SGD
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='SGD'):
     '''
+<<<<<<< HEAD
     A method that calculates the optimal weights for x to predict y in {-1,1} using regularized logistic regression using gradient descent or SGD
+=======
+    A method that calculates the optimal weights for x to predict y using regularized logistic regression using gradient descent or SGD
+>>>>>>> b5a9f10... Updated implementations.py
 
     usage: w, loss = reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma)
 
@@ -267,6 +309,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='S
     w = initial_w
     if mode=='SGD': # Stochastic Gradient Descent
         for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
+<<<<<<< HEAD
             # calculate gradient
             # grad = tx_batch.T@((1/(1+np.exp(-tx_batch@w)))-y_batch) + lambda_*w
             grad = tx_batch.T@(-y_batch/(1+np.exp(y_batch*(tx_batch.dot(w))))) + lambda_*w
@@ -419,6 +462,22 @@ def reg_logistic_regression_newton(y, tx, lambda_, initial_w, max_iters, gamma):
 
     # calculate error
     loss = np.sum(np.log(1+np.exp(tx@w))-y*(tx@w)) + 0.5*lambda_*w.dot(w)
+=======
+            exp_Xw = np.exp(tx_batch.T@w)
+            sigma = exp_Xw/(1+exp_Xw)
+            grad = tx_batch.T@(sigma-y_batch) + lambda_*np.sum(w)
+            w = w - gamma*grad
+
+    else: # Gradient Descent
+        for n_iter in range(max_iters):
+            exp_Xw = np.exp(tx.T@w)
+            sigma = exp_Xw/(1+exp_Xw)
+            grad = tx.T@(sigma-y) + lambda_*np.sum(w)
+            w = w - gamma*grad
+
+    # calculate error
+    loss = np.sum(np.log(1+np.exp(tx.T@w))-y*tx.T@w) + 0.5*lambda_*w.dot(w)
+>>>>>>> b5a9f10... Updated implementations.py
     
     return w, loss
 
