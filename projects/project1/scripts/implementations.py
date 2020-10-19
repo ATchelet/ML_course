@@ -31,7 +31,7 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
             yield shuffled_y[start_index:end_index], shuffled_tx[start_index:end_index]
 
 ### Mean square error calculation ###
-def MSE(y, tx, e):
+def MSE(y, tx, w):
     """
     A method that calculates the mean square error (MSE).
 
@@ -107,7 +107,7 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     
     w = initial_w
     
-    for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
+    for minibatch_y, minibatch_tx in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
         # compute gradient
         # tx is the x input matrix with the augmented 1 column at the beginning for the w0 parameter as the offset at axis origins
         e=minibatch_y-minibatch_tx@w
