@@ -353,4 +353,72 @@ def reg_logistic_regression_newton(y, tx, lambda_, initial_w, max_iters, gamma):
     loss = np.sum(np.log(1+np.exp(tx@w))-y*(tx@w)) + 0.5*lambda_*w.dot(w)
     
     return w, loss
+    
+# Logistic regression with Newton's Method
+def logistic_regression_newton(y, tx, initial_w, max_iters, gamma):
+    '''
+    A method that calculates the optimal weights for x to predict y using logistic regression using Newton's method
+
+    usage: w, loss = logistic_regression_newton(y, tx, initial_w, max_iters, gamma)
+
+    input:
+    -y          - output labels vector [Nx1]
+    -tx         - input features matrix [NxD]
+    -initial_w  - initial weights values [1xD]
+    -max_iter   - maximal number of iterations [scalar]
+    -gamma      - regularization parameter [scalar]
+    output:
+    -w      - optimal weights [1xD]
+    -loss   - overall distance of prediction from true label [scalar]
+    '''
+    w = initial_w
+
+    # iterate to optimize weights
+    for n_iter in range(max_iters):
+        # calculate gradient
+        grad=tx.T.dot(np.exp(tx.dot(w))/(1+np.exp(tx.dot(w)))-y)
+        # calculate Hessian matrix - H=X.T@S@X , S = diag(sigma(X.T@w)*[1-sigma(X.T@w)])
+        H = tx.T@(np.diagflat((1/(1+np.exp(-tx.dot(w))))*(1-(1/(1+np.exp(-tx.dot(w)))))))@tx
+        # update weights
+        # w -= gamma*(np.linalg.inv(H)@grad)
+        w = np.linalg.solve(H, w-gamma*grad)
+
+    # calculate error
+    loss = np.sum(np.log(1+np.exp(tx@w))-y*(tx@w))
+    
+    return w, loss
+    
+# Regularized logistic regression using gradient descent or SGD
+def reg_logistic_regression_newton(y, tx, lambda_, initial_w, max_iters, gamma):
+    '''
+    A method that calculates the optimal weights for x to predict y using regularized logistic regression using Newton's method
+
+    usage: w, loss = reg_logistic_regression_newton(y, tx, lambda_, initial_w, max_iters, gamma)
+
+    input:
+    -y          - output labels vector [Nx1]
+    -tx         - input features matrix [NxD]
+    -lambda_    - regularizaition parameter [scalar]
+    -initial_w  - initial weights values [1xD]
+    -max_iter   - maximal number of iterations [scalar]
+    -gamma      - regularization parameter [scalar]
+    output:
+    -w      - optimal weights [1xD]
+    -loss   - overall distance of prediction from true label [scalar]
+    '''
+    w = initial_w
+
+    for n_iter in range(max_iters):
+        # calculate gradient
+        grad=tx.T.dot(np.exp(tx.dot(w))/(1+np.exp(tx.dot(w)))-y) + lambda_*w
+        # calculate Hessian matrix - H=X.T@S@X , S = diag(sigma(X.T@w)*[1-sigma(X.T@w)])
+        H = tx.T@(np.diagflat((1/(1+np.exp(-tx.dot(w))))*(1-(1/(1+np.exp(-tx.dot(w)))))))@tx
+        # update weights
+        # w -= gamma*(np.linalg.inv(H)@grad)
+        w = np.linalg.solve(H, w-gamma*grad)
+
+    # calculate error
+    loss = np.sum(np.log(1+np.exp(tx@w))-y*(tx@w)) + 0.5*lambda_*w.dot(w)
+    
+    return w, loss
 
