@@ -47,6 +47,23 @@ def MSE(y, tx, w):
     e = y-tx@w #calculation of error
     loss = 0.5*e@e/len(y) #calculation of loss (MSE)
     return loss
+
+    ### Mean square error calculation ###
+def logistic_loss(y, tx, w):
+    """
+    A method that calculates the loss of the log-likelihood loss.
+
+    usage: loss = logistic_loss(y, tx, w)
+
+    input:
+    -y  - output labels vector [Nx1]
+    -tx - input features matrix [NxD]
+    -w  - weights vector [Dx1]
+    output:
+    -loss   - distance of prediction from true label [scalar]
+    """
+    # calculate logistic regression loss
+    return np.sum(np.log(1+np.exp(-y*(tx@w))))
             
 ########################    
 ### Implementations  ###
@@ -221,7 +238,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, mode='SGD'):
     # calculate error
     loss=np.sum(np.log(1+np.exp(tx.dot(w)))-y*tx.dot(w))
     
-    return loss, w
+    return w, loss
     
     
 # Regularized logistic regression using gradient descent or SGD
@@ -251,19 +268,21 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='S
     if mode=='SGD': # Stochastic Gradient Descent
         for y_batch, tx_batch in batch_iter(y, tx, batch_size=1, num_batches=max_iters):
             # calculate gradient
-            grad = tx_batch.T@((1/(1+np.exp(-tx_batch@w)))-y_batch) + lambda_*w
+            # grad = tx_batch.T@((1/(1+np.exp(-tx_batch@w)))-y_batch) + lambda_*w
+            grad = tx_batch.T@(-y_batch/(1+np.exp(y_batch*(tx_batch.dot(w))))) + lambda_*w
             # update weights
             w = w - gamma*grad 
 
     else: # Gradient Descent
         for n_iter in range(max_iters):
             # calculate gradient
-            grad = tx.T@((1/(1+np.exp(-tx@w)))-y) + lambda_*w
+            # grad = tx.T@((1/(1+np.exp(-tx@w)))-y) + lambda_*w
+            grad = tx.T@(-y/(1+np.exp(y*(tx.dot(w))))) + lambda_*w
             # update weights
             w = w - gamma*grad
 
     # calculate error
-    loss = np.sum(np.log(1+np.exp(tx@w))-y*(tx@w)) + 0.5*lambda_*w.dot(w)
+    loss = np.sum(np.log(1+np.exp(-y*(tx@w)))) + 0.5*lambda_*w.dot(w)
     
     return w, loss
     
