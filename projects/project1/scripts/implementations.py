@@ -198,7 +198,7 @@ def ridge_regression(y, tx, lambda_):
 ### Logistic regression using gradient descent or SGD ###
 def logistic_regression(y, tx, initial_w, max_iters, gamma, mode='SGD'):
     '''
-    A method that calculates the optimal weights for x  to predict y using logistic regression using gradient descent or SGD.
+    A method that calculates the optimal weights for x  to predict y in {0,1} using logistic regression using gradient descent or SGD.
     
     usage: w, loss = logistic_regression(y, tx, initial_w, max_iters, gamma)
     
@@ -244,7 +244,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, mode='SGD'):
 # Regularized logistic regression using gradient descent or SGD
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='SGD'):
     '''
-    A method that calculates the optimal weights for x to predict y using regularized logistic regression using gradient descent or SGD
+    A method that calculates the optimal weights for x to predict y in {-1,1} using regularized logistic regression using gradient descent or SGD
 
     usage: w, loss = reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma)
 
@@ -271,7 +271,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='S
             # grad = tx_batch.T@((1/(1+np.exp(-tx_batch@w)))-y_batch) + lambda_*w
             grad = tx_batch.T@(-y_batch/(1+np.exp(y_batch*(tx_batch.dot(w))))) + lambda_*w
             # update weights
-            w = w - gamma*grad 
+            w = w + gamma*grad 
 
     else: # Gradient Descent
         for n_iter in range(max_iters):
@@ -279,7 +279,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, mode='S
             # grad = tx.T@((1/(1+np.exp(-tx@w)))-y) + lambda_*w
             grad = tx.T@(-y/(1+np.exp(y*(tx.dot(w))))) + lambda_*w
             # update weights
-            w = w - gamma*grad
+            w = w + gamma*grad
 
     # calculate error
     loss = np.sum(np.log(1+np.exp(-y*(tx@w)))) + 0.5*lambda_*w.dot(w)
