@@ -56,16 +56,27 @@ def build_poly(x, degree):
     # by applying the polynomial basis to the input data
     
     # First get N and D, the number of datapoints and features
-    if x.ndim == 1:
-        raise NameError('This function only works for multi feature data')
-    N = x.shape[0]
-    D = x.shape[1]
-        
-    phi_x = np.empty(shape=(N, 1+D*degree))
-    phi_x[:,0] = 1
-    
-    for degree_i in range(degree):
+    if x.ndim != 1: # Have to use different methods if only 1 dimension or multiple, because shape doesn't work
+        N = x.shape[0]
+        D = x.shape[1]
+
+        phi_x = np.empty(shape=(N, 1+D*degree))
+        phi_x[:,0] = 1
+
+        for degree_i in range(degree):
             phi_x[:, (1+degree_i*D):(1+(1+degree_i)*D)] = np.power(x, degree_i+1)
+                
+    else:
+        N = 1
+        D = len(x)
+        phi_x = np.empty(shape=(N, 1+D*degree))
+        phi_x[0, 0] = 1
+        for degree_i in range(degree):
+            phi_x[0, (1+degree_i*D):(1+(1+degree_i)*D)] = np.power(x, degree_i+1)
+            
+    return phi_x
+            
+    
             
     return phi_x
 # THEO TEST CODE

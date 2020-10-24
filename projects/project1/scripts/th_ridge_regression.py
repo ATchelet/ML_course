@@ -2,6 +2,7 @@
 """Function used to compute the loss."""
 
 import numpy as np
+from th_helpers import build_poly
 
 def ridge_regression(y, tx, lambda_):
     """Performs ridge regression.
