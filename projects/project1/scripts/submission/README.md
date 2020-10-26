@@ -33,6 +33,9 @@ In this folder you will find two principal files :
 - test_implementations
 > Testing of crucial functions in the implementations.py file
 
+- logistic_GD_with_cross_validation-project1.ipynb
+> Looking at results given by logistic regression gradient descent method through a 6-fold cross validation
+
 ### Python files
 
 - th_helpers.py
