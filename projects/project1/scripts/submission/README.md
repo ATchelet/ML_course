@@ -30,6 +30,9 @@ In this folder you will find two principal files :
 - th_ridge_split8sets-restricted-noretrain.ipynb
 > file similar to th_ridge_split8sets-restricted but just testing an alternative last step, to not retrain our models from the hole dataset. This did not change the results, so we did not use it because it was not using as much data in the end.
 
+- test_implementations
+> Testing of crucial functions in the implementations.py file
+
 ### Python files
 
 - th_helpers.py

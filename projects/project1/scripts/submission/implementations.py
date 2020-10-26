@@ -49,7 +49,7 @@ def MSE(y, tx, e):
     -loss   - distance of prediction from true label [scalar]
     """
     e = y-tx@w #calculation of error
-    loss = 0.5*e@e/len(y) #calculation of loss (MSE)
+    loss = float(0.5*np.dot(e.T, e)/len(y)) #calculation of loss (MSE)
     return loss
 <<<<<<< HEAD
 
